@@ -13,4 +13,4 @@ from .get import get
 from .bulkdownload import bulkdownload
 from .export_table import export_table
 from .get_table import get_table
-from .get_pit_data import get_pit_data
+from .get_point_in_time_data import get_point_in_time_data

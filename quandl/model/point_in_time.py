@@ -2,13 +2,12 @@ from quandl.operations.get import GetOperation
 from quandl.operations.list import ListOperation
 from .data import Data
 from .model_base import ModelBase
-from inflection import (underscore, pluralize)
 
 import logging
 log = logging.getLogger(__name__)
 
 
-class Pit(GetOperation, ListOperation, ModelBase):
+class PointInTime(GetOperation, ListOperation, ModelBase):
     def data(self, **options):
         if not options:
             options = {'params': {}}
@@ -18,7 +17,7 @@ class Pit(GetOperation, ListOperation, ModelBase):
         return "%s/:id/%s" % (self.lookup_key(), self.pit_url(),)
 
     def lookup_key(self):
-        return underscore(pluralize(type(self).__name__))
+        return 'pit'
 
     def pit_url(self):
         interval = self.options['pit']['interval']

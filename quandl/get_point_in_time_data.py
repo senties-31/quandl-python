@@ -1,16 +1,17 @@
-from quandl.model.pit import Pit
+from quandl.model.point_in_time import PointInTime
 from quandl.errors.quandl_error import LimitExceededError
 from .api_config import ApiConfig
 from .message import Message
+from quandl.errors.quandl_error import InvalidRequestError
 import warnings
 import copy
 
 
-def get_pit_data(datatable_code, **options):
+def get_point_in_time_data(datatable_code, **options):
     validate_pit_options(options)
     pit_options = {}
 
-    # Remove the PIT params/keys from t he options to not send it as a query params
+    # Remove the PIT params/keys from the options to not send it as a query params
     for k in ['interval', 'date', 'start_date', 'end_date']:
         if k in options.keys():
             pit_options[k] = options.pop(k)
@@ -24,7 +25,7 @@ def get_pit_data(datatable_code, **options):
     page_count = 0
     while True:
         next_options = copy.deepcopy(options)
-        next_data = Pit(datatable_code, pit=pit_options).data(params=next_options)
+        next_data = PointInTime(datatable_code, pit=pit_options).data(params=next_options)
 
         if data is None:
             data = next_data
@@ -53,18 +54,14 @@ def get_pit_data(datatable_code, **options):
 
 def validate_pit_options(options):
     if 'interval' not in options.keys():
-        # TODO: Change it to raise the correct error
-        raise AttributeError('option `interval` is required')
+        raise InvalidRequestError('option `interval` is required')
 
     if options['interval'] in ['asofdate', 'before']:
-        # check for date
         if 'date' not in options.keys():
-            # TODO: Change it to raise the correct error
-            raise AttributeError('option `date` is required')
+            raise InvalidRequestError('option `date` is required')
+
     elif options['interval'] in ['from', 'between']:
-        # check for dates
         if 'start_date' not in options.keys() or 'end_date' not in options.keys():
-            # TODO: Change it to raise the correct error
-            raise AttributeError('options `start_date` and `end_date` are required')
+            raise InvalidRequestError('options `start_date` and `end_date` are required')
     else:
-        raise AttributeError('option `interval` is invalid')
+        raise InvalidRequestError('option `interval` is invalid')
