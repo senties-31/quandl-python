@@ -7,7 +7,7 @@ import warnings
 import copy
 
 
-def get_point_in_time_data(datatable_code, **options):
+def get_point_in_time(datatable_code, **options):
     validate_pit_options(options)
     pit_options = {}
 
