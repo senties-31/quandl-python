@@ -4,7 +4,7 @@ This quick guide offers convenient ways to retrieve individual datasets or datat
 
 ## Retrieving Data
 
-Retrieving data can be achieved easily using the two methods `quandl.get` for datasets and `quandl.get_table` for datatables. In both cases we strongly recommend that you set your api key via:
+Retrieving data can be achieved easily using these methods `quandl.get` for datasets, `quandl.get_table` for datatables and `quandl.get_point_in_time` for point in time data. In all cases we strongly recommend that you set your api key via:
 
  ```python
 import quandl
@@ -42,7 +42,7 @@ This revised query will find all data points annually for the dataset `NSE/OIL` 
 The following additional parameters can be specified for a dataset call:
 
 | Option | Explanation | Example | Description |
-|---|---|---|---|
+|--------|-------------|---------|-------------|
 | api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `quandl.ApiConfig.api_key=` |
 | \<filter / transformation parameter\> | A parameter which filters or transforms the resulting data | `start_date='2010-01-01` | For a full list see our [api docs](https://www.quandl.com/docs/api#data) |
 
@@ -181,6 +181,25 @@ For more information on how to use and manipulate the resulting data see the [pa
   * *(recommended)* Refine your filter parameters to retrieve a smaller results set
   * Use the the [Detailed](./FOR_DEVELOPERS.md) method to iterate through more of the data.
 
+
+### Point in Time
+
+PointInTime works similarly to datatables but filtering the data based on dates. For example, a simple way to retrieve datatable information on a specific date would be:
+
+```python
+import quandl
+data = quandl.get_point_in_time('MER/F1', interval='asofdate', date='2020-01-01')
+```
+#### Available options
+
+| Interval | Explanation | Required params | Example |
+|----------|-------------|-----------------|---------|
+| asofdate | It is going to return data of a especific date | date | `quandl.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')` |
+| before | It is going to return data until a especific date | date | `quandl.get_point_in_time('DATABASE/CODE', interval='before', date='2020-01-01')` |
+| from | It is going to return data between dates non-inclusive | start_date, end_date  | `quandl.get_point_in_time('DATABASE/CODE', interval='from', start_date='2020-01-01', end_date='2020-02-01')` |
+| between | It is going to return data between dates inclusive | start_end, end_date  | `quandl.get_point_in_time('DATABASE/CODE', interval='between', start_date='2020-01-01', end_date='2020-02-01')` |
+
+
 ## More usages
 
-For even more advanced usage please see our [Detailed Method Guide] (./FOR_DEVELOPERS.md).
+For even more advanced usage please see our [Detailed Method Guide](./FOR_DEVELOPERS.md).

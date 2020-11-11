@@ -1,3 +1,7 @@
+### 3.5.4 - 2020-11-13
+
+* Add Point in Time
+
 ### 3.5.3 - 2020-10-14
 
 * Support passing a pandas Series to `get_table`

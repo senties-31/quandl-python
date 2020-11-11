@@ -7,6 +7,7 @@ from .errors.quandl_error import *
 from .model.database import Database
 from .model.dataset import Dataset
 from .model.datatable import Datatable
+from .model.point_in_time import PointInTime
 from .model.data import Data
 from .model.merged_dataset import MergedDataset
 from .get import get

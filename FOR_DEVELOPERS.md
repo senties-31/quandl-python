@@ -181,6 +181,19 @@ All options beyond specifying the dataset `WIKI/AAPL` are optional.
 
 See the `pandas` and `NumPy` documentation for a wealth of options on data manipulation.
 
+
+
+### Point in Time
+Point in time data can be retrieved in much the same was as a datatable. For example:
+
+```python
+data = quandl.PointInTime('ZACKS/FC', pit={'interval': 'asofdate', 'date': '2020-01-01'}).data()
+# or
+data = quandl.PointInTime('ZACKS/FC', pit={'interval': 'from', 'start_date': '2020-01-01', 'end_date': '2020-01-15'}).data()
+```
+For more options please check [this table](https://github.com/quandl/quandl-python/blob/DRW-204/add-pit/FOR_ANALYSTS.md#point-in-time)
+
+
 ## Retrieving metadata
 
 ### Dataset
