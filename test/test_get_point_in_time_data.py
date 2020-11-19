@@ -7,6 +7,7 @@ from mock import patch, call
 import quandl
 from quandl.utils.request_type_util import RequestType
 from quandl.errors.quandl_error import InvalidRequestError
+from datetime import date
 
 
 class GetPointInTimeTest(unittest.TestCase):
@@ -38,9 +39,21 @@ class GetPointInTimeTest(unittest.TestCase):
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')
+    def test_asofdate_call_without_date(self, mock):
+        quandl.get_point_in_time('ZACKS/FC', interval='asofdate')
+        expected = call('get', "pit/ZACKS/FC/asofdate/%s" % date.today(), params={})
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
     def test_before_call_connection(self, mock):
         quandl.get_point_in_time('ZACKS/FC', interval='before', date='2020-01-01')
         expected = call('get', 'pit/ZACKS/FC/before/2020-01-01', params={})
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
+    def test_before_call_without_date(self, mock):
+        quandl.get_point_in_time('ZACKS/FC', interval='before')
+        expected = call('get', "pit/ZACKS/FC/before/%s" % date.today(), params={})
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')
@@ -73,19 +86,20 @@ class GetPointInTimeTest(unittest.TestCase):
             lambda: quandl.get_point_in_time('ZACKS/FC', interval='quandl')
         )
 
-    @patch('quandl.connection.Connection.request')
-    def test_invalid_asofdate_connection(self, mock):
-        self.assertRaises(
-            InvalidRequestError,
-            lambda: quandl.get_point_in_time('ZACKS/FC', interval='asofdate')
-        )
-
-    @patch('quandl.connection.Connection.request')
-    def test_invalid_before_connection(self, mock):
-        self.assertRaises(
-            InvalidRequestError,
-            lambda: quandl.get_point_in_time('ZACKS/FC', interval='before')
-        )
+    # We are not validating that asofdate needs a date, now we are setting the date.today().
+    # @patch('quandl.connection.Connection.request')
+    # def test_invalid_asofdate_connection(self, mock):
+    #     self.assertRaises(
+    #         InvalidRequestError,
+    #         lambda: quandl.get_point_in_time('ZACKS/FC', interval='asofdate')
+    #     )
+    #
+    # @patch('quandl.connection.Connection.request')
+    # def test_invalid_before_connection(self, mock):
+    #     self.assertRaises(
+    #         InvalidRequestError,
+    #         lambda: quandl.get_point_in_time('ZACKS/FC', interval='before')
+    #     )
 
     @patch('quandl.connection.Connection.request')
     def test_invalid_from_connection(self, mock):

@@ -56,12 +56,9 @@ def validate_pit_options(options):
     if 'interval' not in options.keys():
         raise InvalidRequestError('option `interval` is required')
 
-    if options['interval'] in ['asofdate', 'before']:
-        if 'date' not in options.keys():
-            raise InvalidRequestError('option `date` is required')
+    if options['interval'] not in ['asofdate', 'before', 'from', 'between']:
+        raise InvalidRequestError('option `interval` is invalid')
 
-    elif options['interval'] in ['from', 'between']:
+    if options['interval'] in ['from', 'between']:
         if 'start_date' not in options.keys() or 'end_date' not in options.keys():
             raise InvalidRequestError('options `start_date` and `end_date` are required')
-    else:
-        raise InvalidRequestError('option `interval` is invalid')
